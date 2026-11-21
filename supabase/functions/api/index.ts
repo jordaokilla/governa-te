@@ -6,7 +6,7 @@
 //   POST /api/reconcile         tarefa periódica (cabeçalho x-cron-secret)
 //   POST /api/admin             convites do painel e teste da AppyPay
 // A função é pública (sem verificação de JWT à entrada): cada rota faz a sua própria validação.
-import { cors, fail } from "../_shared/db.ts";
+import { cors, fail } from "./lib/db.ts";
 import { handle as checkout } from "./handlers/checkout.ts";
 import { handle as orderStatus } from "./handlers/order-status.ts";
 import { handle as publicForms } from "./handlers/public-forms.ts";

@@ -1,9 +1,9 @@
 // Tarefa periódica (pg_cron, de 5 em 5 minutos): confirma na AppyPay os pagamentos
 // pendentes, fecha as tentativas sem resposta e liberta as reservas fora de prazo.
 // deno-lint-ignore-file no-explicit-any
-import { cors, fail, getConfig, json, serviceClient, timingSafeEqual } from "../../_shared/db.ts";
-import { getToken, isConfigured, lookupCharge } from "../../_shared/appypay.ts";
-import { applyOutcome } from "../../_shared/payments.ts";
+import { cors, fail, getConfig, json, serviceClient, timingSafeEqual } from "../lib/db.ts";
+import { getToken, isConfigured, lookupCharge } from "../lib/appypay.ts";
+import { applyOutcome } from "../lib/payments.ts";
 
 const EXPRESS_GIVE_UP_MS = 20 * 60_000;
 const REFERENCE_GRACE_MS = 6 * 3_600_000;

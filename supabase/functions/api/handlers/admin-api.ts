@@ -1,8 +1,8 @@
 // Painel: activação de um convite de administrador (define a palavra-passe)
 // e teste das credenciais da AppyPay.
 // deno-lint-ignore-file no-explicit-any
-import { allow, cleanText, clientIp, cors, fail, getConfig, json, serviceClient, sha256Hex } from "../../_shared/db.ts";
-import { getToken, isConfigured } from "../../_shared/appypay.ts";
+import { allow, cleanText, clientIp, cors, fail, getConfig, json, serviceClient, sha256Hex } from "../lib/db.ts";
+import { getToken, isConfigured } from "../lib/appypay.ts";
 
 async function findInvite(db: any, code: unknown) {
   if (typeof code !== "string" || !/^[a-f0-9]{36}$/.test(code)) return null;

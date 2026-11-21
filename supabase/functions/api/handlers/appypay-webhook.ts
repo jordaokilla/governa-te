@@ -1,8 +1,8 @@
 // Webhook da AppyPay. O corpo só serve para localizar a transacção:
 // o estado real é sempre confirmado directamente na AppyPay antes de marcar o pedido.
-import { cors, fail, getConfig, json, serviceClient, timingSafeEqual } from "../../_shared/db.ts";
-import { getToken, lookupCharge } from "../../_shared/appypay.ts";
-import { applyOutcome } from "../../_shared/payments.ts";
+import { cors, fail, getConfig, json, serviceClient, timingSafeEqual } from "../lib/db.ts";
+import { getToken, lookupCharge } from "../lib/appypay.ts";
+import { applyOutcome } from "../lib/payments.ts";
 
 export async function handle(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });

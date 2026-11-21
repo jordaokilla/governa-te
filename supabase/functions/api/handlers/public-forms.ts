@@ -1,6 +1,6 @@
 // Formulários públicos: lista de espera, pedidos de proposta e «os meus bilhetes».
 // deno-lint-ignore-file no-explicit-any
-import { allow, cleanEmail, cleanPhone, cleanText, clientIp, cors, fail, json, serviceClient } from "../../_shared/db.ts";
+import { allow, cleanEmail, cleanPhone, cleanText, clientIp, cors, fail, json, serviceClient } from "../lib/db.ts";
 
 const KINDS = new Set(["waitlist", "exhibitor", "sponsor", "contact"]);
 

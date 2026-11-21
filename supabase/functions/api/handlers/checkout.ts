@@ -1,9 +1,9 @@
 // Compra pública: cria o pedido (preço e stock conferidos na base) e inicia o pagamento.
 // Com `token`, paga um pedido que já existe (nova tentativa ou cobrança criada no painel).
 // deno-lint-ignore-file no-explicit-any
-import { allow, cleanEmail, cleanPhone, cleanText, clientIp, cors, fail, getConfig, json, serviceClient } from "../../_shared/db.ts";
-import { isConfigured, type Method } from "../../_shared/appypay.ts";
-import { publicOrder, startPayment } from "../../_shared/payments.ts";
+import { allow, cleanEmail, cleanPhone, cleanText, clientIp, cors, fail, getConfig, json, serviceClient } from "../lib/db.ts";
+import { isConfigured, type Method } from "../lib/appypay.ts";
+import { publicOrder, startPayment } from "../lib/payments.ts";
 
 export async function handle(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });

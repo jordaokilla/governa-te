@@ -1,8 +1,8 @@
 // Estado de um pedido pela ligação privada (token) e bilhete pela sua ligação.
 // Enquanto o pagamento está em curso, confirma o estado na AppyPay (no máximo de 8 em 8 segundos).
 // deno-lint-ignore-file no-explicit-any
-import { allow, cleanText, clientIp, cors, fail, getConfig, json, serviceClient } from "../../_shared/db.ts";
-import { publicOrder, syncOrder } from "../../_shared/payments.ts";
+import { allow, cleanText, clientIp, cors, fail, getConfig, json, serviceClient } from "../lib/db.ts";
+import { publicOrder, syncOrder } from "../lib/payments.ts";
 
 const TOKEN = /^[a-f0-9]{32}$/;
 
