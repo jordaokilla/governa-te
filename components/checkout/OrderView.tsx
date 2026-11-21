@@ -193,6 +193,9 @@ export function OrderView() {
   }
   if (!order) return <div className="card mx-auto h-80 max-w-2xl animate-pulse" role="status" aria-label="A carregar o pedido" />;
 
+  // O título já diz que o pagamento falhou: por baixo fica só o motivo.
+  const rawReason = (order.failure_reason ?? "").replace(/^O pagamento não foi concluído[:.]?\s*/i, "").trim();
+  const reason = rawReason ? rawReason.charAt(0).toUpperCase() + rawReason.slice(1) + (/[.!?]$/.test(rawReason) ? "" : ".") : null;
   const when = settings ? eventWhen(settings) : undefined;
   const where = settings ? eventWhere(settings) : undefined;
   const waitedLong = polls >= 18; // cerca de 70 segundos no Multicaixa Express
@@ -259,7 +262,7 @@ export function OrderView() {
               </p>
             </div>
           </div>
-          {order.failure_reason && <p className="mt-4 text-sm text-ember">{order.failure_reason}</p>}
+          {order.failure_reason && <p className="mt-4 text-sm text-ember">A tentativa por Multicaixa Express falhou. {reason} A referência abaixo continua válida.</p>}
           {order.reference ? (
             <div className="mt-5 rounded-xl border border-line bg-coal px-5">
               <CopyValue label="Entidade" value={order.entity ?? ""} />
@@ -283,7 +286,7 @@ export function OrderView() {
           <h1 className="font-display text-2xl font-medium text-white">
             {order.failure_reason ? "O pagamento não foi concluído" : "Conclua o pagamento"}
           </h1>
-          {order.failure_reason && <p className="mt-2 text-[15px] text-ember" role="alert">{order.failure_reason}</p>}
+          {reason && <p className="mt-2 text-[15px] text-ember" role="alert">{reason}</p>}
           <p className="mt-2 text-[15px] text-paper/80">
             {order.expires_at ? `O pedido fica reservado até ${dateTimeLong(order.expires_at)}.` : "Escolha como quer pagar."}
           </p>

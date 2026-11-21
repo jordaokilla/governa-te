@@ -308,7 +308,7 @@ export function Orders() {
       )}
 
       <Modal open={!!open} title={open ? `Pedido n.º ${open.number}` : ""} onClose={() => setOpen(null)}>
-        {open && <Detail key={open.id + open.status} row={open} onChanged={load} />}
+        {open && <Detail key={open.id} row={open} onChanged={load} />}
       </Modal>
       <Modal open={creating} title="Nova cobrança" onClose={() => setCreating(false)}>
         {creating && <NewCharge onCreated={load} />}

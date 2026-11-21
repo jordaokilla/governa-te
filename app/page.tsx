@@ -36,7 +36,7 @@ export default async function Home() {
         <div aria-hidden className="glow-gold pointer-events-none absolute -top-32 left-1/2 -z-10 h-[600px] w-[1000px] -translate-x-1/2" />
         <div className="container-x pt-14 pb-16 sm:pt-20 sm:pb-24">
           <Image src="/img/logo.png" alt="GOVERNA-TE · A geração por quem se espera" width={900} height={653} priority className="h-auto w-56 sm:w-72" />
-          <h1 className="mt-10 max-w-3xl font-display text-4xl leading-[1.08] font-medium tracking-tight text-white uppercase sm:text-5xl lg:text-6xl">
+          <h1 className="mt-10 max-w-3xl font-display text-[1.75rem] leading-[1.1] font-medium tracking-tight text-white uppercase sm:text-5xl lg:text-6xl">
             Responsabilidade que se transforma em acção.
           </h1>
           <p className="lead mt-6 max-w-xl">
