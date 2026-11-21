@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GOVERNA-TE
 
-## Getting Started
+Plataforma do encontro GOVERNA-TE: site público, venda de bilhetes, espaços de expositor e patrocínios, com pagamento pela AppyPay (Multicaixa Express e referência), bilhetes com código QR e painel de administração.
 
-First, run the development server:
+## Como está montada
+
+| Parte | Onde | O que faz |
+| --- | --- | --- |
+| Site e painel | `app/`, `components/` (Next.js, publicado no Vercel) | Páginas públicas, compra, página do pedido, bilhetes e `/admin` |
+| Servidor | `supabase/functions/api/` (uma função com rotas) | Compra, estado do pedido, formulários, webhook e reconciliação da AppyPay, convites do painel |
+| Base de dados | `supabase/migrations/` (Supabase) | Catálogo, pedidos, pagamentos, bilhetes, equipa, administradores e regras de acesso |
+
+Regras que o código segue:
+
+- O público só lê por `public_site()`. As tabelas não têm leitura anónima.
+- Preço e stock são conferidos na base (`service_create_order`), nunca no navegador.
+- Um pedido só fica pago com uma resposta da AppyPay (confirmada por consulta directa, nunca pelo corpo do webhook) ou por um administrador no painel. `service_mark_order_paid` emite os bilhetes uma só vez.
+- Quem não está revelado na equipa sai do servidor só como silhueta: sem nome, sem fotografia.
+- As credenciais (AppyPay, Resend) ficam no Supabase Vault e gravam-se no painel, em Definições. Nunca entram no repositório.
+
+## Páginas
+
+- `/`, `/bilhetes`, `/expositores`, `/patrocinadores`: site público.
+- `/comprar?p=…`: compra. `/pedido?t=…`: pagamento, referência e bilhetes. `/bilhete?t=…`: um bilhete. `/meus-bilhetes`: procura por email e telemóvel.
+- `/admin`: resumo, pedidos, bilhetes, entrada (leitor de QR), contactos, catálogo, equipa e definições.
+- `/activar?c=…`: activação de um convite de administrador.
+
+## Desenvolvimento
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O site usa por omissão o projecto Supabase de produção (endereço e chave publicável em `lib/config.ts`). Para outro projecto, defina `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Verificações antes de enviar:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx tsc --noEmit
+npx eslint .
+npx next build
+```
 
-## Learn More
+Para a função do Supabase:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cd supabase/functions && npx deno check api/index.ts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pagamentos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+A função `api` fala com a AppyPay em `lib/appypay.ts`. O estado dos pagamentos chega por três caminhos, todos a acabar em `applyOutcome` (`lib/payments.ts`):
 
-## Deploy on Vercel
+1. A resposta à própria cobrança (Multicaixa Express).
+2. O webhook `POST /api/appypay-webhook?secret=…` (o endereço completo está em Definições, no painel).
+3. A consulta à AppyPay quando o comprador abre o pedido e a tarefa `governa-te-reconcile` (pg_cron, de 5 em 5 minutos).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O webhook é opcional: sem ele, os caminhos 1 e 3 confirmam os pagamentos.
