@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/config";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const montserrat = Montserrat({ variable: "--font-montserrat", subsets: ["latin"], display: "swap" });
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://governa-te.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

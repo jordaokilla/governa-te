@@ -9,3 +9,6 @@ export const SUPABASE_KEY =
 export const API_URL = `${SUPABASE_URL}/functions/v1/api`;
 
 export const INSTAGRAM_URL = "https://www.instagram.com/governa_te";
+
+/** Endereço público do site (metadados, sitemap, robots). */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://governa-te.vercel.app").replace(/\/+$/, "");
